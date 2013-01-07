@@ -26,6 +26,7 @@ import org.json.simple.parser.ParseException;
  */
 public class Test extends TestCase{
 
+	@SuppressWarnings("unchecked")
 	public void testDecode() throws Exception{
 		System.out.println("=======decode=======");
 		
@@ -56,7 +57,7 @@ public class Test extends TestCase{
 		
 		s="[\"hello\\bworld\\\"abc\\tdef\\\\ghi\\rjkl\\n123\\u4e2d\"]";
 		obj=JSONValue.parse(s);
-		assertEquals("hello\bworld\"abc\tdef\\ghi\rjkl\n123中",((List)obj).get(0).toString());
+		assertEquals("hello\bworld\"abc\tdef\\ghi\rjkl\n123中",((List<Object>)obj).get(0).toString());
 		
 		JSONParser parser = new JSONParser();
 		s="{\"name\":";
@@ -110,22 +111,22 @@ public class Test extends TestCase{
 		
 		s = "{\"first\": 123, \"second\": [4, 5, 6], \"third\": 789}";
 		ContainerFactory containerFactory = new ContainerFactory(){
-			public List creatArrayContainer() {
-				return new LinkedList();
+			public List<Object> creatArrayContainer() {
+				return new LinkedList<Object>();
 			}
 
-			public Map createObjectContainer() {
-				return new LinkedHashMap();
+			public Map<Object,Object> createObjectContainer() {
+				return new LinkedHashMap<Object,Object>();
 			}
 			
 		};
 		
 		try{
-			Map json = (Map)parser.parse(s, containerFactory);
-			Iterator iter = json.entrySet().iterator();
+			Map<Object,Object> json = (Map<Object,Object>)parser.parse(s, containerFactory);
+			Iterator<Map.Entry<Object,Object>> iter = json.entrySet().iterator();
 			System.out.println("==iterate result==");
 			while(iter.hasNext()){
-				Map.Entry entry = (Map.Entry)iter.next();
+				Map.Entry<Object,Object> entry = (Map.Entry<Object,Object>)iter.next();
 				System.out.println(entry.getKey() + "=>" + entry.getValue());
 			}
 			
@@ -326,7 +327,7 @@ public class Test extends TestCase{
 		System.out.println();
 		assertEquals("[\"abc\\u0010a\\/\",123,222.123,true,{\"weight\":60.21,\"age\":27,\"name\":\"fang\",\"is_developer\":true}]",array1.toString());
 	
-		List list = new ArrayList();
+		List<Object> list = new ArrayList<Object>();
 		list.add("abc\u0010a/");
 		list.add(new Integer(123));
 		list.add(new Double(222.123));
@@ -337,7 +338,7 @@ public class Test extends TestCase{
 		System.out.println();
 		assertEquals("[\"abc\\u0010a\\/\",123,222.123,true,null]",JSONArray.toJSONString(list));
 		
-		Map map = new HashMap();
+		Map<Object,Object> map = new HashMap<Object,Object>();
 		map.put("name","fang");
 		map.put("age",new Integer(27));
 		map.put("is_developer",new Boolean(true));
@@ -348,9 +349,9 @@ public class Test extends TestCase{
 		System.out.println();
 		assertEquals("{\"array1\":[\"abc\\u0010a\\/\",123,222.123,true,null],\"weight\":60.21,\"age\":27,\"name\":\"fang\",\"is_developer\":true}",JSONObject.toJSONString(map));		
 		
-        Map m1 = new LinkedHashMap();
-        Map m2 = new HashMap();
-        List  l1 = new LinkedList();
+        Map<Object,Object> m1 = new LinkedHashMap<Object,Object>();
+        Map<Object,Object> m2 = new HashMap<Object,Object>();
+        List<Object>  l1 = new LinkedList<Object>();
 
         m1.put("k11","v11");
         m1.put("k12","v12");
@@ -370,8 +371,8 @@ public class Test extends TestCase{
         System.out.println(jsonString);
         assertEquals("[{\"k11\":\"v11\",\"k12\":\"v12\",\"k13\":\"v13\"},{\"k22\":\"v22\",\"k21\":\"v21\",\"k23\":\"v23\"}]", jsonString);
         
-        List l2 = new LinkedList();
-        Map m3 = new LinkedHashMap();
+        List<Object> l2 = new LinkedList<Object>();
+        Map<Object,Object> m3 = new LinkedHashMap<Object,Object>();
         m3.put("k31", "v3");
         m3.put("k32", new Double(123.45));
         m3.put("k33", new Boolean(false));
